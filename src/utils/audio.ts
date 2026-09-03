@@ -207,6 +207,7 @@ class SoundManager {
     if (customAudioUrl) {
       try {
         const audio = new Audio(customAudioUrl);
+        audio.volume = 0.35;
         this.activeSoundCueAudio = audio;
         audio.onended = () => {
           if (this.activeSoundCueAudio === audio) {
@@ -339,9 +340,21 @@ class SoundManager {
   public playThemeClaps(): void {
     if (this.isMuted) return;
 
+    this.stopSoundCue();
+
     try {
       const audio = new Audio('/audio/theme-claps.mp3');
+      audio.volume = 0.12; // Matches low background music volume
+      this.activeSoundCueAudio = audio;
+      audio.onended = () => {
+        if (this.activeSoundCueAudio === audio) {
+          this.activeSoundCueAudio = null;
+        }
+      };
       audio.play().catch(() => {
+        if (this.activeSoundCueAudio === audio) {
+          this.activeSoundCueAudio = null;
+        }
         this.synthesizeThemeClaps();
       });
       return;
@@ -360,7 +373,7 @@ class SoundManager {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(600, ctx.currentTime + delay);
       osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + delay + 0.08);
-      gain.gain.setValueAtTime(0.25, ctx.currentTime + delay);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime + delay);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.08);
       osc.connect(gain);
       gain.connect(ctx.destination);

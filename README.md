@@ -2,6 +2,8 @@
 
 An interactive, mobile-first web trivia game built for true *Friends* fans. Test your knowledge across 10 unique mini-game categories to determine your ultimate Friends fan level!
 
+https://friends.prajapatimehul2610.workers.dev
+
 ---
 
 ## ✨ Features
